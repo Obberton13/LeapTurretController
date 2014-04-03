@@ -11,8 +11,7 @@ namespace turretController
         Program program;
         private readonly int LEAP_MAX_Y = 350;
         private readonly int LEAP_MAX_X = 175;
-        private readonly int TURRET_MIN_Y = 50;
-        private readonly int TURRET_MIN_X = -175;
+        private readonly int MOVEMENT = 10;
 
         public LeapListener(Program program)
         {
@@ -54,17 +53,31 @@ namespace turretController
             SafeWriteLine("Exited");
         }
 
+        private int getCoordinateFromLeap(float coord, bool x)
+        {
+            if (x)
+            {
+                int center = ((program.TURRET_MAX_X - program.TURRET_MIN_X) / 2) + program.TURRET_MIN_X;
+                return (int)(coord * ((center) / LEAP_MAX_X)) + center;
+            }
+            else
+            {
+                int center = ((program.TURRET_MAX_Y - program.TURRET_MIN_Y) / 2) + program.TURRET_MIN_Y;
+                return (int)(coord * ((center) / LEAP_MAX_Y)) + center;
+            }
+        }
+
         public override void OnFrame(Controller controller)
         {
             // Get the most recent frame and report some basic information
             Frame frame = controller.Frame();
 
-            /* SafeWriteLine("Frame id: " + frame.Id
+             SafeWriteLine("Frame id: " + frame.Id
                          + ", timestamp: " + frame.Timestamp
                          + ", hands: " + frame.Hands.Count
                          + ", fingers: " + frame.Fingers.Count
                          + ", tools: " + frame.Tools.Count
-                         + ", gestures: " + frame.Gestures().Count);*/
+                         + ", gestures: " + frame.Gestures().Count);
 
             if (!frame.Hands.IsEmpty)
             {
@@ -82,8 +95,60 @@ namespace turretController
                         avgPos += finger.TipPosition;
                     }
                     avgPos /= fingers.Count;
-                    SafeWriteLine(fingers.Count + " fingers, position: " + avgPos);
 
+                    int currentTurretX = program.getTurretX();
+                    int shouldBeTurretX = getCoordinateFromLeap(avgPos.x, true);
+                    
+                    int currentTurretY = program.getTurretY();
+                    int shouldBeTurretY = getCoordinateFromLeap(avgPos.y, false);
+
+                    // if it is above or bel.ow bounds, reset it
+                    if (shouldBeTurretY > program.TURRET_MAX_Y) { shouldBeTurretY = program.TURRET_MAX_Y; }
+                    if (shouldBeTurretY < program.TURRET_MIN_Y) { shouldBeTurretY = program.TURRET_MIN_Y; }
+                    if (shouldBeTurretX > program.TURRET_MAX_X) { shouldBeTurretX = program.TURRET_MAX_X; }
+                    if (shouldBeTurretX < program.TURRET_MIN_X) { shouldBeTurretX = program.TURRET_MIN_X; }
+
+                    SafeWriteLine("Turret is at " + currentTurretX + ", " + currentTurretY + ". Should be " + shouldBeTurretX + ", " + shouldBeTurretY + "." );
+
+                    // axis = true when we should go on the x axis
+                    bool axis = (Math.Abs(currentTurretX - shouldBeTurretX) > Math.Abs(currentTurretY - shouldBeTurretY));
+
+                    // direction = true when we should go up or left
+                    bool direction;
+                    if (axis)
+                    {
+                        if (Math.Abs(currentTurretX - shouldBeTurretX) > 100)
+                        {
+                            direction = (currentTurretX > shouldBeTurretX);
+                            if (direction)
+                            {
+                                // left
+                                program.goLeft(MOVEMENT);
+                            }
+                            else
+                            {
+                                // right
+                                program.goRight(MOVEMENT);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Math.Abs(currentTurretY - shouldBeTurretY) > 100)
+                        {
+                            direction = (currentTurretY < shouldBeTurretY);
+                            if (direction)
+                            {
+                                // up
+                                program.goUp(MOVEMENT);
+                            }
+                            else
+                            {
+                                // down
+                                program.goDown(MOVEMENT);
+                            }
+                        }
+                    }
                     // TODO
                 }
 
@@ -92,8 +157,8 @@ namespace turretController
                              + " mm, palm position: " + hand.PalmPosition);*/
 
                 // Get the hand's normal vector and direction
-                Vector normal = hand.PalmNormal;
-                Vector direction = hand.Direction;
+                //Vector normal = hand.PalmNormal;
+                //Vector direction = hand.Direction;
 
                 // Calculate the hand's pitch, roll, and yaw angles
                 /*  SafeWriteLine("Hand pitch: " + direction.Pitch * 180.0f / (float)Math.PI + " degrees, "
@@ -110,7 +175,7 @@ namespace turretController
 
                 switch (gesture.Type)
                 {
-                    case Gesture.GestureType.TYPESWIPE:
+                   /* case Gesture.GestureType.TYPESWIPE:
                         SwipeGesture swipe = new SwipeGesture(gesture);
                         SafeWriteLine("Swipe id: " + swipe.Id
                                        + ", " + swipe.State
@@ -135,7 +200,7 @@ namespace turretController
                             program.goUp(50);
                         }
 
-                        break;
+                        break;*/
                     case Gesture.GestureType.TYPESCREENTAP:
                         ScreenTapGesture screentap = new ScreenTapGesture(gesture);
                         SafeWriteLine("Tap id: " + screentap.Id

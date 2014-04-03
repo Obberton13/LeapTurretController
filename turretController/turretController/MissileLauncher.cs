@@ -8,13 +8,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Threading;
+using System.Threading.Tasks;
 using UsbLibrary;
 
-namespace BuildDefender
+namespace turretController
 {
     class MissileLauncher
     {
-        private bool DevicePresent;
+        private Program program;
+        public bool DevicePresent;
 
         //Bytes used in command
         private byte[] UP;
@@ -29,8 +31,11 @@ namespace BuildDefender
 
         private UsbHidPort USB;
 
-        public MissileLauncher()
+        private bool isMoving = false;
+
+        public MissileLauncher(Program p)
         {
+            this.program = p;
 
             this.UP = new byte[10];
             this.UP[1] = 2;
@@ -133,13 +138,28 @@ namespace BuildDefender
             if (DevicePresent)
             {
                 this.moveMissileLauncher(this.LEFT, 5500);
-                this.moveMissileLauncher(this.RIGHT, 2750);
-                this.moveMissileLauncher(this.UP, 2000);
-                this.moveMissileLauncher(this.DOWN, 500);
+                //this.moveMissileLauncher(this.RIGHT, 2750);
+                //this.moveMissileLauncher(this.UP, 2000);
+                //this.moveMissileLauncher(this.DOWN, 1000);
             }
         }
 
         private void moveMissileLauncher(byte[] Data, int interval)
+        {
+            //moveMissileLauncherInThread(Data, interval);
+
+            if (!isMoving)
+            {
+                program.log("Moving turret.");
+                MoveLauncherThread mlt = new MoveLauncherThread(Data, interval, new ThreadCallback(ResultCallback), this);
+
+                Thread t = new Thread(new ThreadStart(mlt.ThreadProc));
+                t.Start();
+                t.Join();
+            }
+        }
+
+        public void moveMissileLauncherInThread(byte[] Data, int interval)
         {
             if (DevicePresent)
             {
@@ -187,6 +207,76 @@ namespace BuildDefender
             this.DevicePresent = false;
         }
 
+        public void ResultCallback(byte[] Data, int interval)
+        {
+            isMoving = false;
+            Console.WriteLine("Thread finished.");
+
+            if (Data == this.LEFT)
+            {
+                int turretX = program.getTurretX();
+                turretX -= interval;
+                if (turretX < program.TURRET_MIN_X)
+                {
+                    turretX = program.TURRET_MIN_X;
+                }
+                program.setTurretX(turretX);
+            }
+            else if (Data == this.RIGHT)
+            {
+                int turretX = program.getTurretX();
+                turretX += interval;
+                if (turretX > program.TURRET_MAX_X)
+                {
+                    turretX = program.TURRET_MAX_X;
+                }
+                program.setTurretX(turretX);
+            }
+            else if (Data == this.UP)
+            {
+                int turretY = program.getTurretY();
+                turretY += interval;
+                if (turretY > program.TURRET_MAX_Y)
+                {
+                    turretY = program.TURRET_MAX_Y;
+                }
+                program.setTurretY(turretY);
+            }
+            else if (Data == this.DOWN)
+            {
+                int turretY = program.getTurretY();
+                turretY -= interval;
+                if (turretY < program.TURRET_MIN_Y)
+                {
+                    turretY = program.TURRET_MIN_Y;
+                }
+                program.setTurretY(turretY);
+            }
+        }
+
+    }
+
+    public delegate void ThreadCallback(byte[] Data, int interval);
+
+    class MoveLauncherThread
+    {
+        private byte[] Data;
+        private int interval;
+        private ThreadCallback tc;
+        private MissileLauncher launcher;
+        public MoveLauncherThread(byte[] Data, int interval, ThreadCallback tc, MissileLauncher myLauncher)
+        {
+            this.launcher = myLauncher;
+            this.Data = Data;
+            this.interval = interval;
+            this.tc = tc;
+        }
+
+        public void ThreadProc()
+        {
+            launcher.moveMissileLauncherInThread(Data, interval);
+            tc(Data, interval);
+        }
     }
 
 }
