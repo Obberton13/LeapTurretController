@@ -12,7 +12,6 @@ namespace turretController
         private readonly int LEAP_MAX_Y = 350;
         private readonly int LEAP_MAX_X = 175;
         private readonly int MOVEMENT = 10;
-
         public LeapListener(Program program)
         {
             this.program = program;
