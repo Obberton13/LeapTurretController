@@ -103,7 +103,7 @@ namespace turretController
             // Open Preview window in picturebox .
             // Create a child window with capCreateCaptureWindowA so you can display it in a picturebox.
 
-            hHwnd = capCreateCaptureWindowA(ref DeviceIndex, WS_VISIBLE | WS_CHILD, 0, 0, 640, 480, oHandle.ToInt32(), 0);
+            hHwnd = capCreateCaptureWindowA(ref DeviceIndex, WS_VISIBLE | WS_CHILD, 0, 0, 1024, 768, oHandle.ToInt32(), 0);
 
             // Connect to device
             if (SendMessage(hHwnd, WM_CAP_DRIVER_CONNECT, DeviceID, 0) != 0)
@@ -111,7 +111,7 @@ namespace turretController
                 // Set the preview scale
                 SendMessage(hHwnd, WM_CAP_SET_SCALE, -1, 0);
                 // Set the preview rate in terms of milliseconds
-                SendMessage(hHwnd, WM_CAP_SET_PREVIEWRATE, 66, 0);
+                SendMessage(hHwnd, WM_CAP_SET_PREVIEWRATE, 40, 0);
                 // Start previewing the image from the camera
                 SendMessage(hHwnd, WM_CAP_SET_PREVIEW, -1, 0);
                 // Resize window to fit in picturebox

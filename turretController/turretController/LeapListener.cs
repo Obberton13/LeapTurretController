@@ -11,7 +11,7 @@ namespace turretController
         Program program;
         private readonly int LEAP_MAX_Y = 350;
         private readonly int LEAP_MAX_X = 175;
-        private readonly int MOVEMENT = 10;
+        private readonly int MOVEMENT = 40;
         public LeapListener(Program program)
         {
             this.program = program;
@@ -107,7 +107,7 @@ namespace turretController
                     if (shouldBeTurretX > program.TURRET_MAX_X) { shouldBeTurretX = program.TURRET_MAX_X; }
                     if (shouldBeTurretX < program.TURRET_MIN_X) { shouldBeTurretX = program.TURRET_MIN_X; }
 
-                    SafeWriteLine("Turret is at " + currentTurretX + ", " + currentTurretY + ". Should be " + shouldBeTurretX + ", " + shouldBeTurretY + "." );
+                    
 
                     // axis = true when we should go on the x axis
                     bool axis = (Math.Abs(currentTurretX - shouldBeTurretX) > Math.Abs(currentTurretY - shouldBeTurretY));
@@ -118,6 +118,7 @@ namespace turretController
                     {
                         if (Math.Abs(currentTurretX - shouldBeTurretX) > 100)
                         {
+                            SafeWriteLine("Turret is at " + currentTurretX + ", " + currentTurretY + ". Should be " + shouldBeTurretX + ", " + shouldBeTurretY + ".");
                             direction = (currentTurretX > shouldBeTurretX);
                             if (direction)
                             {
@@ -135,6 +136,7 @@ namespace turretController
                     {
                         if (Math.Abs(currentTurretY - shouldBeTurretY) > 100)
                         {
+                            SafeWriteLine("Turret is at " + currentTurretX + ", " + currentTurretY + ". Should be " + shouldBeTurretX + ", " + shouldBeTurretY + ".");
                             direction = (currentTurretY < shouldBeTurretY);
                             if (direction)
                             {

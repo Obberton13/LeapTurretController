@@ -29,7 +29,7 @@ namespace turretController
         {
             
             Program p = new Program();
-            myLauncher = new MissileLauncher(p);
+            myLauncher = new MissileLauncher();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -55,41 +55,41 @@ namespace turretController
 
         public void goRight(int howFar)
         {
-            /*turretX += howFar;
+            turretX += howFar;
             if (turretX > TURRET_MAX_X)
             {
                 turretX = TURRET_MAX_X;
-            }*/
+            }
             myLauncher.command_Right(howFar);
         }
 
         public void goLeft(int howFar)
         {
-           /* turretX -= howFar;
+            turretX -= howFar;
             if(turretX<TURRET_MIN_X)
             {
                 turretX = TURRET_MIN_X;
-            }*/
+            }
             myLauncher.command_Left(howFar);
         }
 
         public void goUp(int howFar)
         {
-           /* turretY += howFar;
+            turretY += howFar;
             if (turretY > TURRET_MAX_Y)
             {
                 turretY = TURRET_MAX_Y;
-            }*/
+            }
             myLauncher.command_Up(howFar);
         }
 
         public void goDown(int howFar)
         {
-            /*turretY -= howFar;
+            turretY -= howFar;
             if(turretY < TURRET_MIN_Y)
             {
                 turretY = TURRET_MIN_Y;
-            }*/
+            }
             myLauncher.command_Down(howFar);
         }
 

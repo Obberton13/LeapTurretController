@@ -30,8 +30,6 @@ namespace turretController
 
         private UsbHidPort USB;
 
-        private bool isMoving = false;
-
         public MissileLauncher()
         {
 
@@ -166,7 +164,7 @@ namespace turretController
                 {
 
                 }
-               
+
             }
         }
 
@@ -189,7 +187,7 @@ namespace turretController
         {
             this.DevicePresent = false;
         }
-
+    }
 
 }
 
