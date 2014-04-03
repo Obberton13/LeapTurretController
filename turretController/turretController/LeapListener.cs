@@ -11,8 +11,7 @@ namespace turretController
         Program program;
         private readonly int LEAP_MAX_Y = 350;
         private readonly int LEAP_MAX_X = 175;
-        private readonly int TURRET_MIN_Y = 50;
-        private readonly int TURRET_MIN_X = -175;
+
 
         public LeapListener(Program program)
         {
@@ -54,9 +53,18 @@ namespace turretController
             SafeWriteLine("Exited");
         }
 
-        private int getCoordinateFromLeap(float coord)
+        private int getCoordinateFromLeap(float coord, bool x)
         {
-            return (int)(coord * 15.71428) + 2750;
+            if (x)
+            {
+                int center = ((program.TURRET_MAX_X - program.TURRET_MIN_X) / 2) + program.TURRET_MIN_X;
+                return (int)(coord * ((center) / LEAP_MAX_X)) + center;
+            }
+            else
+            {
+                int center = ((program.TURRET_MAX_Y - program.TURRET_MIN_Y) / 2) + program.TURRET_MIN_Y;
+                return (int)(coord * ((center) / LEAP_MAX_Y)) + center;
+            }
         }
 
         public override void OnFrame(Controller controller)
@@ -89,10 +97,10 @@ namespace turretController
                     avgPos /= fingers.Count;
 
                     int currentTurretX = program.getTurretX();
-                    int shouldBeTurretX = getCoordinateFromLeap(avgPos.x);
+                    int shouldBeTurretX = getCoordinateFromLeap(avgPos.x, true);
                     
                     int currentTurretY = program.getTurretY();
-                    int shouldBeTurretY = getCoordinateFromLeap(avgPos.y);
+                    int shouldBeTurretY = getCoordinateFromLeap(avgPos.y, false);
 
                     // if it is above or bel.ow bounds, reset it
                     if (shouldBeTurretY > program.TURRET_MAX_Y) { shouldBeTurretY = program.TURRET_MAX_Y; }
@@ -102,6 +110,45 @@ namespace turretController
 
                     SafeWriteLine("Turret is at " + currentTurretX + ", " + currentTurretY + ". Should be " + shouldBeTurretX + ", " + shouldBeTurretY + "." );
 
+                    // axis = true when we should go on the x axis
+                    bool axis = (Math.Abs(currentTurretX - shouldBeTurretX) > Math.Abs(currentTurretY - shouldBeTurretY));
+
+                    // direction = true when we should go up or left
+                    bool direction;
+                    if (axis)
+                    {
+                        if (Math.Abs(currentTurretX - shouldBeTurretX) > 100)
+                        {
+                            direction = (currentTurretX > shouldBeTurretX);
+                            if (direction)
+                            {
+                                // left
+                                program.goLeft(10);
+                            }
+                            else
+                            {
+                                // right
+                                program.goRight(10);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Math.Abs(currentTurretY - shouldBeTurretY) > 100)
+                        {
+                            direction = (currentTurretY < shouldBeTurretY);
+                            if (direction)
+                            {
+                                // up
+                                program.goUp(10);
+                            }
+                            else
+                            {
+                                // down
+                                program.goDown(10);
+                            }
+                        }
+                    }
                     // TODO
                 }
 
@@ -110,8 +157,8 @@ namespace turretController
                              + " mm, palm position: " + hand.PalmPosition);*/
 
                 // Get the hand's normal vector and direction
-                Vector normal = hand.PalmNormal;
-                Vector direction = hand.Direction;
+                //Vector normal = hand.PalmNormal;
+                //Vector direction = hand.Direction;
 
                 // Calculate the hand's pitch, roll, and yaw angles
                 /*  SafeWriteLine("Hand pitch: " + direction.Pitch * 180.0f / (float)Math.PI + " degrees, "

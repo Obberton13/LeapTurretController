@@ -13,12 +13,12 @@ namespace turretController
     public class Program
     {
         private int turretX = 2750;
-        private int turretY = 1500;
+        private int turretY = 1000;
         private int bulletsShot = 0;
         public readonly int TURRET_MAX_Y = 2000;
-        public readonly int TURRET_MAX_X = 5500;
+        public readonly int TURRET_MAX_X = 4000;
         public readonly int TURRET_MIN_Y = 0;
-        public readonly int TURRET_MIN_X = 0;
+        public readonly int TURRET_MIN_X = 1500;
 
         private Object thisLock = new Object();
 

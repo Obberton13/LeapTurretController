@@ -138,7 +138,7 @@ namespace BuildDefender
                 this.moveMissileLauncher(this.LEFT, 5500);
                 this.moveMissileLauncher(this.RIGHT, 2750);
                 this.moveMissileLauncher(this.UP, 2000);
-                this.moveMissileLauncher(this.DOWN, 500);
+                this.moveMissileLauncher(this.DOWN, 1000);
             }
         }
 
