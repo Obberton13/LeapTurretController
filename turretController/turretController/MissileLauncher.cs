@@ -17,6 +17,8 @@ namespace turretController
     {
         public bool DevicePresent;
 
+        private bool isMoving = false;
+
         //Bytes used in command
         private byte[] UP;
         private byte[] RIGHT;
@@ -142,13 +144,15 @@ namespace turretController
 
         public void moveMissileLauncher(byte[] Data, int interval)
         {
-            if (DevicePresent)
+            if (DevicePresent && !isMoving)
             {
+                isMoving = true;
                 this.command_switchLED(true);
                 this.SendUSBData(Data);
                 Thread.Sleep(interval);
                 this.SendUSBData(this.STOP);
                 this.command_switchLED(false);
+                isMoving = false;
             }
         }
 

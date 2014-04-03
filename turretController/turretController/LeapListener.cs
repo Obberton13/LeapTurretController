@@ -9,9 +9,9 @@ namespace turretController
     class LeapListener : Listener
     {
         Program program;
-        private readonly int LEAP_MAX_Y = 350;
-        private readonly int LEAP_MAX_X = 175;
-        private readonly int MOVEMENT = 40;
+        private readonly int LEAP_MAX_Y = 270;
+        private readonly int LEAP_MAX_X = 200;
+        private readonly int MOVEMENT = 20;
         public LeapListener(Program program)
         {
             this.program = program;
