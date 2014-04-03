@@ -27,9 +27,9 @@ namespace turretController
         WebCam oWebCam;
         private void MainUI_Load(object sender, EventArgs e)
         {
-            oWebCam = new WebCam();
+            /*oWebCam = new WebCam();
             oWebCam.Container = pictureBox1;
-            oWebCam.OpenConnection();
+            oWebCam.OpenConnection();*/
             
             p.reset();
             p.initLeap();
