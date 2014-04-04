@@ -16,18 +16,23 @@ namespace turretController
         {
             InitializeComponent();
             this.p = p;
+        }
+
+        private void fireButton_Click(object sender, EventArgs e)
+        {
+            p.log("Fire clicked.");
+            p.fire();
+        }
+
+        private void MainUI_Load(object sender, EventArgs e)
+        {
             p.reset();
             p.initLeap();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void MainUI_Closing(object sender, FormClosingEventArgs e)
         {
-            p.fire();
-
-        }
-
-        private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
+            p.log("Closing Main UI.");
             p.deInitLeap();
         }
     }

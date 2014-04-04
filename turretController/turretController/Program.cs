@@ -14,11 +14,14 @@ namespace turretController
     {
         private int turretX = 2750;
         private int turretY = 1500;
-        private int numProjectiles = 3;
+        private int bulletsShot = 0;
         public readonly int TURRET_MAX_Y = 2000;
         public readonly int TURRET_MAX_X = 5500;
         public readonly int TURRET_MIN_Y = 0;
         public readonly int TURRET_MIN_X = 0;
+
+        private Object thisLock = new Object();
+
         private static MissileLauncher myLauncher;
         private Controller leapController;
         private LeapListener leapListener;
@@ -91,11 +94,8 @@ namespace turretController
 
         public void fire()
         {
-            if(numProjectiles>0)
-            {
-                numProjectiles--;
-                myLauncher.command_Fire();
-            }
+            myLauncher.command_Fire();
+            bulletsShot++;
         }
 
         public void reset()
@@ -103,7 +103,6 @@ namespace turretController
             turretY = 1500;
             turretX = 2750;
             myLauncher.command_reset();
-            numProjectiles = 3;
         }
 
         public int getTurretX()
@@ -124,6 +123,14 @@ namespace turretController
         public void setTurretY(int newY)
         {
             turretY = newY;
+        }
+
+        public void log(String s)
+        {
+            lock (thisLock)
+            {
+                Console.WriteLine(s);
+            }
         }
     }
 }
