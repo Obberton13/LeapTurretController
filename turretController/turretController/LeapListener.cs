@@ -9,6 +9,10 @@ namespace turretController
     class LeapListener : Listener
     {
         Program program;
+        private readonly int LEAP_MAX_Y = 350;
+        private readonly int LEAP_MAX_X = 175;
+        private readonly int TURRET_MIN_Y = 50;
+        private readonly int TURRET_MIN_X = -175;
 
         public LeapListener(Program program)
         {
@@ -78,8 +82,9 @@ namespace turretController
                         avgPos += finger.TipPosition;
                     }
                     avgPos /= fingers.Count;
-                    /* SafeWriteLine("Hand has " + fingers.Count
-                                 + " fingers, average finger tip position: " + avgPos);*/
+                    SafeWriteLine(fingers.Count + " fingers, position: " + avgPos);
+
+                    
                 }
 
                 // Get the hand's sphere radius and palm position
