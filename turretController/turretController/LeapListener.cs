@@ -84,7 +84,7 @@ namespace turretController
                     avgPos /= fingers.Count;
                     SafeWriteLine(fingers.Count + " fingers, position: " + avgPos);
 
-                    if ()
+                    // TODO
                 }
 
                 // Get the hand's sphere radius and palm position

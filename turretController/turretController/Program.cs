@@ -25,7 +25,7 @@ namespace turretController
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new MainUI());
             myLauncher = new MissileLauncher();
             Program p = new Program();
             p.reset();
