@@ -54,6 +54,11 @@ namespace turretController
             SafeWriteLine("Exited");
         }
 
+        private int getCoordinateFromLeap(float coord)
+        {
+            return (int)(coord * 15.71428) + 2750;
+        }
+
         public override void OnFrame(Controller controller)
         {
             // Get the most recent frame and report some basic information
@@ -82,7 +87,20 @@ namespace turretController
                         avgPos += finger.TipPosition;
                     }
                     avgPos /= fingers.Count;
-                    SafeWriteLine(fingers.Count + " fingers, position: " + avgPos);
+
+                    int currentTurretX = program.getTurretX();
+                    int shouldBeTurretX = getCoordinateFromLeap(avgPos.x);
+                    
+                    int currentTurretY = program.getTurretY();
+                    int shouldBeTurretY = getCoordinateFromLeap(avgPos.y);
+
+                    // if it is above or bel.ow bounds, reset it
+                    if (shouldBeTurretY > program.TURRET_MAX_Y) { shouldBeTurretY = program.TURRET_MAX_Y; }
+                    if (shouldBeTurretY < program.TURRET_MIN_Y) { shouldBeTurretY = program.TURRET_MIN_Y; }
+                    if (shouldBeTurretX > program.TURRET_MAX_X) { shouldBeTurretX = program.TURRET_MAX_X; }
+                    if (shouldBeTurretX < program.TURRET_MIN_X) { shouldBeTurretX = program.TURRET_MIN_X; }
+
+                    SafeWriteLine("Turret is at " + currentTurretX + ", " + currentTurretY + ". Should be " + shouldBeTurretX + ", " + shouldBeTurretY + "." );
 
                     // TODO
                 }
@@ -110,7 +128,7 @@ namespace turretController
 
                 switch (gesture.Type)
                 {
-                    case Gesture.GestureType.TYPESWIPE:
+                   /* case Gesture.GestureType.TYPESWIPE:
                         SwipeGesture swipe = new SwipeGesture(gesture);
                         SafeWriteLine("Swipe id: " + swipe.Id
                                        + ", " + swipe.State
@@ -135,7 +153,7 @@ namespace turretController
                             program.goUp(50);
                         }
 
-                        break;
+                        break;*/
                     case Gesture.GestureType.TYPESCREENTAP:
                         ScreenTapGesture screentap = new ScreenTapGesture(gesture);
                         SafeWriteLine("Tap id: " + screentap.Id

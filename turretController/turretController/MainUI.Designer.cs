@@ -33,7 +33,7 @@
             // 
             // fireButton
             // 
-            this.fireButton.Location = new System.Drawing.Point(108, 155);
+            this.fireButton.Location = new System.Drawing.Point(197, 227);
             this.fireButton.Name = "fireButton";
             this.fireButton.Size = new System.Drawing.Size(75, 23);
             this.fireButton.TabIndex = 0;
@@ -45,10 +45,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.fireButton);
+            this.MaximizeBox = false;
             this.Name = "MainUI";
-            this.Text = "MainUI";
+            this.ShowIcon = false;
+            this.Text = "Turret Controller";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainUI_Closing);
             this.Load += new System.EventHandler(this.MainUI_Load);
             this.ResumeLayout(false);
