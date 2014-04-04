@@ -6,18 +6,11 @@ using Leap;
 
 namespace turretController
 {
-    interface LeapCommandInterface
-    {
-        void goRight(int howFar);
-        void goLeft(int howFar);
-        void goUp(int howFar);
-        void goDown(int howFar);
-    }
     class LeapListener : Listener
     {
-        LeapCommandInterface program;
+        Program program;
 
-        public LeapListener(LeapCommandInterface program)
+        public LeapListener(Program program)
         {
             this.program = program;
         }
@@ -119,6 +112,24 @@ namespace turretController
                                        + ", position: " + swipe.Position
                                        + ", direction: " + swipe.Direction
                                        + ", speed: " + swipe.Speed);
+
+                        if (swipe.Direction.x > .3)
+                        {
+                            program.goRight(50);
+                        }
+                        else if (swipe.Direction.x < -.3)
+                        {
+                            program.goLeft(50);
+                        }
+                        else if (swipe.Direction.y < -.3)
+                        {
+                            program.goDown(50);
+                        }
+                        else if (swipe.Direction.y > .3)
+                        {
+                            program.goUp(50);
+                        }
+
                         break;
                     case Gesture.GestureType.TYPESCREENTAP:
                         ScreenTapGesture screentap = new ScreenTapGesture(gesture);
@@ -126,6 +137,8 @@ namespace turretController
                                        + ", " + screentap.State
                                        + ", position: " + screentap.Position
                                        + ", direction: " + screentap.Direction);
+
+                        program.fire();
                         break;
                     default:
                         SafeWriteLine("Unknown gesture type.");
