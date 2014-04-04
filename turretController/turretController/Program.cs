@@ -13,10 +13,10 @@ namespace turretController
         private int turretX = 2750;
         private int turretY = 1500;
         private int numProjectiles = 3;
-        private readonly int TURRET_MAX_Y = 2000;
-        private readonly int TURRET_MAX_X = 5500;
-        private readonly int TURRET_MIN_Y = 0;
-        private readonly int TURRET_MIN_X = 0;
+        public readonly int TURRET_MAX_Y = 2000;
+        public readonly int TURRET_MAX_X = 5500;
+        public readonly int TURRET_MIN_Y = 0;
+        public readonly int TURRET_MIN_X = 0;
         private static MissileLauncher myLauncher;
         
         public static void Main(string[] args)
