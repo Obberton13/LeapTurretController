@@ -11,9 +11,24 @@ namespace turretController
 {
     public partial class MainUI : Form
     {
-        public MainUI()
+        private Program p;
+        public MainUI(Program p)
         {
             InitializeComponent();
+            this.p = p;
+            p.reset();
+            p.initLeap();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            p.fire();
+
+        }
+
+        private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            p.deInitLeap();
         }
     }
 }

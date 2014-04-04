@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace turretController
 {
-    class Program
+    public class Program
     {
         private int turretX = 2750;
         private int turretY = 1500;
@@ -20,35 +20,33 @@ namespace turretController
         public readonly int TURRET_MIN_Y = 0;
         public readonly int TURRET_MIN_X = 0;
         private static MissileLauncher myLauncher;
+        private Controller leapController;
+        private LeapListener leapListener;
         
         public static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainUI());
             myLauncher = new MissileLauncher();
             Program p = new Program();
-            p.reset();
-            p.initLeap();
-            
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainUI(p));
         }
 
-        private void initLeap()
+        public void initLeap()
         {
             // Create a sample listener and controller
-            LeapListener listener = new LeapListener(this);
-            Controller controller = new Controller();
+            leapListener= new LeapListener(this);
+            leapController = new Controller();
 
             // Have the sample listener receive events from the controller
-            controller.AddListener(listener);
+            leapController.AddListener(leapListener);
+        }
 
-            // Keep this process running until Enter is pressed
-            Console.WriteLine("Press Enter to quit...");
-            Console.ReadLine();
-
+        public void deInitLeap()
+        {
             // Remove the sample listener when done
-            controller.RemoveListener(listener);
-            controller.Dispose();
+            leapController.RemoveListener(leapListener);
+            leapController.Dispose();
         }
 
         public void goRight(int howFar)

@@ -155,7 +155,15 @@ namespace BuildDefender
         {
             if (this.USB.SpecifiedDevice != null)
             {
-                this.USB.SpecifiedDevice.SendData(Data);
+                try
+                {
+                    this.USB.SpecifiedDevice.SendData(Data);
+                }
+                catch (System.NullReferenceException e)
+                {
+
+                }
+               
             }
         }
 
