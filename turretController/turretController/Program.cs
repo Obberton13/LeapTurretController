@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using BuildDefender;
+using Leap;
 
 namespace turretController
 {
-    class Program
+    class Program : LeapCommandInterface
     {
         private int turretX = 2750;
         private int turretY = 1500;
@@ -20,9 +21,30 @@ namespace turretController
         public static void Main(string[] args)
         {
             myLauncher = new MissileLauncher();
+            Program p = new Program();
+            p.reset();
+            p.initLeap();
         }
 
-        public void goRight(int howFar)
+        private void initLeap()
+        {
+            // Create a sample listener and controller
+            LeapListener listener = new LeapListener(this);
+            Controller controller = new Controller();
+
+            // Have the sample listener receive events from the controller
+            controller.AddListener(listener);
+
+            // Keep this process running until Enter is pressed
+            Console.WriteLine("Press Enter to quit...");
+            Console.ReadLine();
+
+            // Remove the sample listener when done
+            controller.RemoveListener(listener);
+            controller.Dispose();
+        }
+
+        public override void goRight(int howFar)
         {
             turretX += howFar;
             if (turretX > TURRET_MAX_X)
@@ -32,7 +54,7 @@ namespace turretController
             myLauncher.command_Right(howFar);
         }
 
-        public void goLeft(int howFar)
+        public override void goLeft(int howFar)
         {
             turretX -= howFar;
             if(turretX<TURRET_MIN_X)
@@ -42,7 +64,7 @@ namespace turretController
             myLauncher.command_Left(howFar);
         }
 
-        public void goUp(int howFar)
+        public override void goUp(int howFar)
         {
             turretY += howFar;
             if (turretY > TURRET_MAX_Y)
@@ -52,7 +74,7 @@ namespace turretController
             myLauncher.command_Up(howFar);
         }
 
-        public void goDown(int howFar)
+        public override void goDown(int howFar)
         {
             turretY -= howFar;
             if(turretY < TURRET_MIN_Y)
