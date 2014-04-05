@@ -88,15 +88,11 @@ namespace turretController
 
         public void fire()
         {
-<<<<<<< HEAD
             if(numProjectiles>0)
             {
                 numProjectiles--;
                 myLauncher.command_Fire();
             }
-=======
-            myLauncher.command_Fire();
->>>>>>> 885aff2a1e2ca3a788913d870e6087e901f22279
         }
 
         public void reset()
