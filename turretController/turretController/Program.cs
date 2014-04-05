@@ -12,6 +12,7 @@ namespace turretController
     {
         private int turretX = 2750;
         private int turretY = 1500;
+        private int numProjectiles = 3;
         private readonly int TURRET_MAX_Y = 2000;
         private readonly int TURRET_MAX_X = 5500;
         private readonly int TURRET_MIN_Y = 0;
@@ -84,11 +85,41 @@ namespace turretController
             myLauncher.command_Down(howFar);
         }
 
+        public void fire()
+        {
+            if(numProjectiles>0)
+            {
+                numProjectiles--;
+                myLauncher.command_Fire();
+            }
+        }
+
         public void reset()
         {
             turretY = 1500;
             turretX = 2750;
             myLauncher.command_reset();
+            numProjectiles = 3;
+        }
+
+        public int getTurretX()
+        {
+            return turretX;
+        }
+
+        public int getTurretY()
+        {
+            return turretY;
+        }
+
+        public void setTurretX(int newX)
+        {
+            turretX = newX;
+        }
+
+        public void setTurretY(int newY)
+        {
+            turretY = newY;
         }
     }
 }
