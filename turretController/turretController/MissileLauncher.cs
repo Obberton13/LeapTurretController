@@ -8,13 +8,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Threading;
+using System.Threading.Tasks;
 using UsbLibrary;
 
 namespace BuildDefender
 {
     class MissileLauncher
     {
-        private bool DevicePresent;
+        public bool DevicePresent;
 
         //Bytes used in command
         private byte[] UP;
@@ -28,6 +29,8 @@ namespace BuildDefender
         private byte[] LED_ON;
 
         private UsbHidPort USB;
+
+        private bool isMoving = false;
 
         public MissileLauncher()
         {
@@ -141,6 +144,17 @@ namespace BuildDefender
 
         private void moveMissileLauncher(byte[] Data, int interval)
         {
+            if (!isMoving)
+            {
+                MoveLauncherThread mlt = new MoveLauncherThread(Data, interval, new ThreadCallback(ResultCallback), this);
+
+                Thread t = new Thread(new ThreadStart(mlt.ThreadProc));
+                t.Start();
+            }
+        }
+
+        public void moveMissileLauncherInThread(byte[] Data, int interval)
+        {
             if (DevicePresent)
             {
                 this.command_switchLED(true);
@@ -187,6 +201,35 @@ namespace BuildDefender
             this.DevicePresent = false;
         }
 
+        public void ResultCallback()
+        {
+            isMoving = false;
+            Console.WriteLine("Thread finished.");
+        }
+
+    }
+
+    public delegate void ThreadCallback();
+
+    class MoveLauncherThread
+    {
+        private byte[] Data;
+        private int interval;
+        private ThreadCallback tc;
+        private MissileLauncher launcher;
+        public MoveLauncherThread(byte[] Data, int interval, ThreadCallback tc, MissileLauncher myLauncher)
+        {
+            this.launcher = myLauncher;
+            this.Data = Data;
+            this.interval = interval;
+            this.tc = tc;
+        }
+
+        public void ThreadProc()
+        {
+            launcher.moveMissileLauncherInThread(Data, interval);
+            tc();
+        }
     }
 
 }
