@@ -6,7 +6,7 @@ using System.Threading;
 using Leap;
 using System.Windows.Forms;
 using System.Threading.Tasks;
-
+using System.IO.Ports;
 namespace turretController
 {
     public class Program
@@ -20,7 +20,7 @@ namespace turretController
         public readonly int TURRET_MIN_X = 1500;
 
         private Object thisLock = new Object();
-
+        private String numberLight;
         private static MissileLauncher myLauncher;
         private Controller leapController;
         private LeapListener leapListener;
@@ -133,5 +133,13 @@ namespace turretController
                 Console.WriteLine(s);
             }
         }
+        public void showLight(String numberLight)
+        {
+            SerialPort port = new SerialPort("COM7", 9600);
+            port.Open();
+            port.Write(numberLight + '\n');
+            port.Close();
+        }
     }
+
 }
