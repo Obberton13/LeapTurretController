@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using BuildDefender;
 using Leap;
+using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace turretController
 {
@@ -19,8 +21,11 @@ namespace turretController
         public readonly int TURRET_MIN_X = 0;
         private static MissileLauncher myLauncher;
         
-        public static void Main(string[] args)
+        public static void Main()
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
             myLauncher = new MissileLauncher();
             Program p = new Program();
             p.reset();
