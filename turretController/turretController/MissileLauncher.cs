@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Threading;
-using System.UsbLibrary;
+using UsbLibrary;
 
 namespace BuildDefender
 {
