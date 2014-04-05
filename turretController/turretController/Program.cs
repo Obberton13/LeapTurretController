@@ -51,5 +51,22 @@ namespace turretController
             }
             myLauncher.command_Up(howFar);
         }
+
+        public void goDown(int howFar)
+        {
+            turretY -= howFar;
+            if(turretY < TURRET_MIN_Y)
+            {
+                turretY = TURRET_MIN_Y;
+            }
+            myLauncher.command_Down(howFar);
+        }
+
+        public void reset()
+        {
+            turretY = 1500;
+            turretX = 2750;
+            myLauncher.command_reset();
+        }
     }
 }
