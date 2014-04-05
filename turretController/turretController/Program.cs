@@ -8,7 +8,7 @@ using Leap;
 
 namespace turretController
 {
-    class Program : LeapCommandInterface
+    class Program
     {
         private int turretX = 2750;
         private int turretY = 1500;
@@ -25,6 +25,7 @@ namespace turretController
             Program p = new Program();
             p.reset();
             p.initLeap();
+            
         }
 
         private void initLeap()
@@ -45,7 +46,7 @@ namespace turretController
             controller.Dispose();
         }
 
-        public override void goRight(int howFar)
+        public void goRight(int howFar)
         {
             turretX += howFar;
             if (turretX > TURRET_MAX_X)
@@ -55,7 +56,7 @@ namespace turretController
             myLauncher.command_Right(howFar);
         }
 
-        public override void goLeft(int howFar)
+        public void goLeft(int howFar)
         {
             turretX -= howFar;
             if(turretX<TURRET_MIN_X)
@@ -65,7 +66,7 @@ namespace turretController
             myLauncher.command_Left(howFar);
         }
 
-        public override void goUp(int howFar)
+        public void goUp(int howFar)
         {
             turretY += howFar;
             if (turretY > TURRET_MAX_Y)
@@ -75,7 +76,7 @@ namespace turretController
             myLauncher.command_Up(howFar);
         }
 
-        public override void goDown(int howFar)
+        public void goDown(int howFar)
         {
             turretY -= howFar;
             if(turretY < TURRET_MIN_Y)
@@ -87,11 +88,15 @@ namespace turretController
 
         public void fire()
         {
+<<<<<<< HEAD
             if(numProjectiles>0)
             {
                 numProjectiles--;
                 myLauncher.command_Fire();
             }
+=======
+            myLauncher.command_Fire();
+>>>>>>> 885aff2a1e2ca3a788913d870e6087e901f22279
         }
 
         public void reset()
